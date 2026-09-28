@@ -1,0 +1,463 @@
+@layer components {
+    /*
+     * Retro pixel button, CSS only.
+     * A coloured slab with a pixel chevron sits at the left; on hover or
+     * keyboard focus it springs across the button, the chevron flips, and
+     * the label slides and turns black with a one-frame blur flicker.
+     * --pix sets the slab colour per instance.
+     */
+    .btn-retro {
+        --pix: var(--color-signal-strong);
+        --slab: 55px;
+        --pad: 64px;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        height: 4rem;
+        padding-inline: 2rem;
+        overflow: hidden;
+        border: 1px solid var(--color-signal);
+        border-radius: 0.5rem;
+        background: var(--color-raise);
+        color: #f5f5f5;
+        font-family: var(--font-mono);
+        font-weight: 500;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform 120ms var(--ease-out);
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-retro:active {
+        transform: scale(0.98);
+    }
+
+    .btn-retro:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--color-signal) 60%, transparent);
+        outline-offset: 2px;
+    }
+
+    .btn-retro--sm {
+        --slab: 42px;
+        --pad: 48px;
+        height: 3rem;
+        padding-inline: 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-retro--white {
+        --pix: var(--color-prime);
+    }
+
+    .btn-retro__slab {
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        left: 4px;
+        z-index: 1;
+        width: var(--slab);
+        overflow: hidden;
+        border-radius: 0.25rem;
+        background: var(--pix);
+        transition: width 420ms var(--ease-spring);
+    }
+
+    .btn-retro__icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 100%;
+        color: #000;
+    }
+
+    .btn-retro--sm .btn-retro__icon {
+        width: 3rem;
+    }
+
+    .btn-retro__icon svg {
+        width: 40px;
+        height: 40px;
+        transition: transform 380ms var(--ease-spring);
+    }
+
+    .btn-retro--sm .btn-retro__icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .btn-retro__label {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding-left: var(--pad);
+        text-align: center;
+        white-space: nowrap;
+        transition:
+            padding 400ms var(--ease-out),
+            color 200ms var(--ease-out);
+    }
+
+    .btn-retro:is(:focus-visible, .is-active) .btn-retro__slab {
+        width: calc(100% - 8px);
+    }
+
+    .btn-retro:is(:focus-visible, .is-active) .btn-retro__icon svg {
+        transform: rotate(180deg);
+    }
+
+    .btn-retro:is(:focus-visible, .is-active) .btn-retro__label {
+        padding-left: 0;
+        padding-right: var(--pad);
+        color: #000;
+        animation: retro-flicker 300ms linear;
+    }
+
+    @media (hover: hover) {
+        .btn-retro:hover .btn-retro__slab {
+            width: calc(100% - 8px);
+        }
+
+        .btn-retro:hover .btn-retro__icon svg {
+            transform: rotate(180deg);
+        }
+
+        .btn-retro:hover .btn-retro__label {
+            padding-left: 0;
+            padding-right: var(--pad);
+            color: #000;
+            animation: retro-flicker 300ms linear;
+        }
+    }
+
+    @keyframes retro-flicker {
+        50% {
+            opacity: 0.5;
+            filter: blur(2px);
+        }
+    }
+
+    /* Stat strip with hairline dividers: 2 columns on mobile, one row from md. */
+    .stats {
+        @apply grid grid-cols-2 border-y border-line text-sm;
+    }
+
+    .stats > div {
+        padding-block: 1rem;
+        padding-right: 1rem;
+    }
+
+    .stats > div:nth-child(even) {
+        @apply border-l border-line pl-4;
+    }
+
+    .stats > div:nth-child(n + 3) {
+        @apply border-t border-line;
+    }
+
+    .stats > div:last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
+    @media (min-width: 768px) {
+        .stats {
+            grid-template-columns: none;
+            grid-auto-flow: column;
+        }
+
+        .stats > div + div {
+            @apply border-l pl-4;
+        }
+
+        .stats > div:nth-child(n + 3) {
+            border-top: 0;
+        }
+
+        .stats > div:last-child:nth-child(odd) {
+            grid-column: auto;
+        }
+    }
+
+    .stats dd {
+        @apply tabular mt-1 text-fg;
+    }
+
+    /* Square-bullet list. */
+    .ticks {
+        @apply grid gap-3;
+    }
+
+    .ticks li {
+        @apply flex gap-3 text-[13px] leading-relaxed text-body;
+    }
+
+    .ticks li::before {
+        content: '';
+        @apply mt-[7px] size-1.5 shrink-0 bg-signal;
+    }
+
+    /* Key/value grid. */
+    .kv {
+        @apply grid gap-x-8 gap-y-3 text-[13px] sm:grid-cols-[180px_1fr];
+    }
+
+    .kv > div {
+        display: contents;
+    }
+
+    .kv dt {
+        @apply micro pt-0.5;
+    }
+
+    .kv dd {
+        @apply text-body;
+    }
+
+    /* Segmented bar / meter: cells are server-rendered, colour via --on. */
+    .blocks {
+        --on: var(--color-frontier);
+        display: flex;
+        gap: 2px;
+    }
+
+    .blocks > span {
+        flex: 1;
+        height: 0.625rem;
+        background: var(--color-line-soft);
+    }
+
+    .blocks > span.is-on {
+        background: var(--on);
+    }
+
+    .blocks > span.is-cap {
+        background: #404040;
+    }
+
+    .blocks--meter {
+        gap: 3px;
+    }
+
+    .blocks--meter > span {
+        height: 0.75rem;
+        background: var(--color-line);
+    }
+
+    /* Square chips. */
+    .badge {
+        @apply inline-flex w-fit shrink-0 items-center gap-1.5 border border-line px-2 py-0.5 text-[11px] tracking-wider whitespace-nowrap text-dim uppercase;
+    }
+
+    .badge--solid {
+        @apply border-transparent bg-neutral-100 text-black;
+    }
+
+    .badge--inset {
+        @apply border-neutral-700 bg-raise text-body;
+    }
+
+    .badge--signal {
+        @apply border-transparent bg-signal-strong text-black;
+    }
+
+    /* Tables: hairline frame, uppercase micro headers, mono cells. */
+    .px-table-wrap {
+        @apply relative w-full overflow-x-auto rounded-lg border border-line bg-panel;
+    }
+
+    .px-table {
+        @apply w-full caption-bottom text-[13px];
+    }
+
+    .px-table thead tr {
+        @apply border-b border-line;
+    }
+
+    .px-table tbody tr {
+        @apply border-b border-line-soft transition-colors duration-200 hover:bg-signal/[0.03];
+    }
+
+    .px-table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .px-table th {
+        @apply h-11 px-4 text-left align-middle text-[11px] font-normal tracking-widest whitespace-nowrap text-faint uppercase;
+    }
+
+    .px-table td {
+        @apply px-4 py-3 align-middle text-dim;
+    }
+
+    .px-table caption {
+        @apply border-t border-line px-4 py-3 text-left text-xs text-faint;
+    }
+
+    /* Callout: orange hairline, faint wash, triangle icon. */
+    .notice {
+        @apply flex items-start gap-3 rounded-lg border border-signal/30 bg-signal-strong/[0.04] px-4 py-3 text-xs leading-relaxed text-dim;
+    }
+
+    .notice strong {
+        @apply font-medium text-fg;
+    }
+
+    /* Breadcrumbs. */
+    .crumbs {
+        @apply flex flex-wrap items-center gap-2 text-[11px] tracking-widest text-faint uppercase;
+    }
+
+    .crumbs li + li::before {
+        content: '/' / '';
+        @apply mr-2 text-neutral-600;
+    }
+
+    .crumbs a {
+        @apply transition-colors hover:text-signal;
+    }
+
+    .crumbs [aria-current='page'] {
+        @apply text-body;
+    }
+
+    /* "On this page" chips. */
+    .chip-nav {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .chip-nav a {
+        @apply flex items-center gap-2 rounded-md border border-line px-3 py-2 text-xs tracking-wider text-dim uppercase transition-colors hover:border-signal/60 hover:text-fg;
+    }
+
+    .chip-nav__num {
+        @apply text-faint transition-colors;
+    }
+
+    .chip-nav a:hover .chip-nav__num {
+        color: var(--color-signal);
+    }
+
+    /* FAQ on native <details>; height animates where ::details-content is supported. */
+    .px-faq {
+        border-top: 1px solid var(--color-line);
+    }
+
+    .px-faq details {
+        border-bottom: 1px solid var(--color-line);
+    }
+
+    .px-faq summary {
+        @apply flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left;
+    }
+
+    .px-faq summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .px-faq__q {
+        @apply font-mono text-sm tracking-tight text-body uppercase transition-colors duration-300 md:text-[15px];
+    }
+
+    .px-faq summary:hover .px-faq__q {
+        color: var(--color-fg);
+    }
+
+    .px-faq__num {
+        @apply mr-3 text-signal;
+    }
+
+    .px-faq__chevron {
+        @apply flex size-6 shrink-0 items-center justify-center text-faint transition-[transform,color] duration-300;
+        transition-timing-function: var(--ease-spring);
+    }
+
+    .px-faq details[open] .px-faq__chevron {
+        transform: rotate(180deg);
+    }
+
+    .px-faq__a {
+        @apply pr-12 pb-6 font-mono text-[13px] leading-[1.7] text-dim md:text-sm;
+    }
+
+    @supports selector(::details-content) {
+        .px-faq details {
+            interpolate-size: allow-keywords;
+        }
+
+        .px-faq details::details-content {
+            height: 0;
+            opacity: 0;
+            overflow: clip;
+            transition:
+                height 300ms var(--ease-out),
+                opacity 300ms var(--ease-out),
+                content-visibility 300ms allow-discrete;
+        }
+
+        .px-faq details[open]::details-content {
+            height: auto;
+            opacity: 1;
+        }
+    }
+
+    /* Pixel art grids (stack, sprite). Cells pop in with a per-cell --k stagger. */
+    .pixel-grid {
+        display: grid;
+        gap: 3px;
+    }
+
+    .pixel-grid > span {
+        aspect-ratio: 1;
+    }
+
+    .pixel-grid--pop > span {
+        animation: pixel-pop 250ms var(--ease-out) both;
+        animation-delay: calc(300ms + var(--k, 0) * 12ms);
+    }
+
+    @keyframes pixel-pop {
+        from {
+            opacity: 0;
+            scale: 0.4;
+        }
+    }
+
+    /* Stepped line chart. */
+    .px-chart text {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        fill: var(--color-faint);
+    }
+
+    /* Oversized footer wordmark. CSS content keeps it out of the a11y tree and contrast audits. */
+    .px-footer-mark::after {
+        content: attr(data-mark) / '';
+        display: block;
+        margin-top: 2.5rem;
+        text-align: center;
+        font-family: var(--font-pixel);
+        font-size: 19vw;
+        line-height: 1;
+        color: var(--color-line-soft);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .px-footer-mark::after {
+            font-size: 15vw;
+        }
+    }
+
+    /* Form fields. */
+    .px-label {
+        @apply micro mb-2 block;
+    }
+
+    .px-field {
+        @apply w-full rounded-md border border-line bg-panel px-3 py-2.5 text-[13px] text-fg outline-none transition-colors placeholder:text-faint focus:border-signal;
+    }
+}

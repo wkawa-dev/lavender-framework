@@ -1,0 +1,44 @@
+/*
+ * pixel: pitch black, mono body, Geist Pixel display, one orange signal.
+ * Motion advances in hard frames (steps()) like an 8-bit sprite.
+ *
+ * Every effect below is a transition, keyframe, or scroll-driven animation.
+ * No runtime motion library.
+ *
+ * source(none) keeps cream classes out of this bundle.
+ */
+@import 'tailwindcss' source(none);
+
+@source '../views/themes/pixel/**/*.blade.php';
+@source '../views/components/**/*.blade.php';
+@source '../views/errors/**/*.blade.php';
+
+/* '<Family> fallback' faces come from @fonts (fontaine): local fonts with
+   size-adjust + ascent/descent overrides, so the swap to the webfont does not shift layout. */
+@theme {
+    --font-mono: 'Geist Mono', 'Geist Mono fallback', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-pixel: 'Geist Pixel', 'Geist Pixel fallback', ui-monospace, monospace;
+
+    --color-void: #000;
+    --color-panel: #0a0a0a;
+    --color-raise: #171717;
+    --color-line: #262626;
+    --color-line-soft: #171717;
+    --color-fg: #fafafa;
+    --color-body: #d4d4d4;
+    --color-dim: #a3a3a3;
+    /* neutral-500 (#737373) fails AA on black at 4.4:1; this is 5.2:1. */
+    --color-faint: #808080;
+    --color-signal: #fdba74;
+    --color-signal-strong: #fb923c;
+
+    /* Three-step series: white → grey → orange (charts, meters, stacks). */
+    --color-prime: #fafafa;
+    --color-hy: #a3a3a3;
+    --color-frontier: #fb923c;
+}
+
+@import './pixel/base.css';
+@import './pixel/nav.css';
+@import './pixel/components.css';
+@import './pixel/motion.css';

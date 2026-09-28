@@ -1,0 +1,51 @@
+{
+    "bg-abstract": {
+        "widths": [
+            640,
+            960,
+            1280
+        ],
+        "width": 1280,
+        "height": 972,
+        "source": "1306dce532db1ff92333cab42d7a438ebe3cf518e0926ed06dbca1f55ddfa766"
+    },
+    "hero-backdrop": {
+        "widths": [
+            640,
+            960
+        ],
+        "width": 960,
+        "height": 1280,
+        "source": "a621c252fe9eed80a99f03248bb3ee984b55410d70c6a49df77362580a217b19"
+    },
+    "how-01": {
+        "widths": [
+            640,
+            960,
+            1280
+        ],
+        "width": 1280,
+        "height": 853,
+        "source": "1481d154af0c07b1091ad0c3e16225695fe695de0b9d2ec9b3a1273423a42431"
+    },
+    "how-02": {
+        "widths": [
+            640,
+            960,
+            1280
+        ],
+        "width": 1280,
+        "height": 853,
+        "source": "2735c7a3da1c95e547d1706a552500168e135f38d1972a43ec3795514ad94897"
+    },
+    "how-03": {
+        "widths": [
+            640,
+            960,
+            1280
+        ],
+        "width": 1280,
+        "height": 960,
+        "source": "0e101583e7be6cb729ed27ea41a05a6098517a8ad3eff0bb0b8cdeea2bb4e1cd"
+    }
+}

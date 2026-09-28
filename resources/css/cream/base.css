@@ -1,0 +1,154 @@
+@layer base {
+    :root {
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    ::selection {
+        background: var(--color-ink);
+        color: var(--color-paper);
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .wrap {
+        @apply mx-auto w-full max-w-6xl px-6 lg:px-8;
+    }
+
+    .eyebrow {
+        @apply text-xs font-medium uppercase tracking-[0.18em] text-muted;
+    }
+
+    :where(.btn, .link, .nav-link, summary, .header-menu, .mobile-nav__brand, .mobile-nav__link):focus-visible {
+        outline: 2px solid var(--color-ink);
+        outline-offset: 2px;
+    }
+
+    .site-nav .nav-link:focus-visible,
+    .mobile-nav__brand:focus-visible,
+    .mobile-nav__link:focus-visible {
+        outline-offset: 4px;
+    }
+
+    .wordmark {
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: -0.04em;
+        line-height: 1;
+    }
+
+    .link {
+        @apply text-ink underline decoration-line underline-offset-4 hover:decoration-ink;
+        transition: text-decoration-color 160ms var(--ease-out);
+    }
+
+    .section {
+        @apply border-b border-line;
+    }
+
+    .section-pad {
+        @apply py-20 md:py-28;
+    }
+
+    .faq-item summary {
+        list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-item__icon {
+        transition: transform 200ms var(--ease-out);
+    }
+
+    .faq-item[open] .faq-item__icon {
+        transform: rotate(45deg);
+    }
+
+    /* Markdown prose. Hand-written instead of @tailwindcss/typography: ~1 KB vs ~14 KB. */
+    .prose-cream {
+        @apply max-w-[68ch] text-base leading-relaxed text-ink;
+
+        & :is(h2, h3) {
+            @apply mt-12 mb-4 font-serif font-normal tracking-tight;
+        }
+
+        & h2 {
+            @apply text-3xl leading-[1.1];
+        }
+
+        & h3 {
+            @apply text-2xl;
+        }
+
+        & :is(h2, h3):first-child {
+            @apply mt-0;
+        }
+
+        & p,
+        & :is(ul, ol) {
+            @apply mb-5;
+        }
+
+        & ul {
+            @apply list-disc pl-5 marker:text-muted;
+        }
+
+        & ol {
+            @apply list-decimal pl-5 marker:text-muted;
+        }
+
+        & li + li {
+            @apply mt-2;
+        }
+
+        & a {
+            @apply underline decoration-line underline-offset-4 hover:decoration-ink;
+        }
+
+        & strong {
+            @apply font-semibold;
+        }
+
+        & blockquote {
+            @apply my-8 border-l border-line pl-6 font-serif text-xl italic;
+        }
+
+        & hr {
+            @apply my-12 border-line;
+        }
+
+        & code {
+            @apply rounded-sm bg-line/60 px-1 py-0.5 text-[0.9em];
+        }
+
+        & pre {
+            @apply mb-6 overflow-x-auto rounded-sm border border-line bg-white/60 p-4 text-sm leading-relaxed;
+
+            & code {
+                @apply bg-transparent p-0;
+            }
+        }
+
+        & table {
+            @apply mb-8 w-full border-collapse text-left text-sm;
+        }
+
+        & th {
+            @apply border-b border-ink/20 py-2 pr-4 font-medium;
+        }
+
+        & td {
+            @apply border-b border-line py-2 pr-4 align-top;
+        }
+    }
+}

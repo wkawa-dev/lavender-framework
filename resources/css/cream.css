@@ -1,0 +1,31 @@
+/*
+ * cream: light editorial. Paper, type, thin rules. No dark mode, no
+ * gradients-as-decoration, no shadows. Tokens below are the whole palette.
+ *
+ * source(none) stops Tailwind from scanning the pixel theme, so this
+ * bundle only contains classes cream views actually use.
+ */
+@import 'tailwindcss' source(none);
+
+@source '../views/themes/cream/**/*.blade.php';
+@source '../views/components/**/*.blade.php';
+@source '../views/errors/**/*.blade.php';
+
+/* '<Family> fallback' faces come from @fonts (fontaine): local fonts with
+   size-adjust + ascent/descent overrides, so the swap to the webfont does not shift layout. */
+@theme {
+    --font-sans: 'Geist', 'Geist fallback', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-serif: 'Newsreader', 'Newsreader fallback', ui-serif, Georgia, 'Times New Roman', serif;
+    --color-paper: #f6f4ef;
+    --color-ink: #171614;
+    --color-muted: #6f675e;
+    --color-line: #e4dfd6;
+    --color-accent: #1f3a8a;
+}
+
+@import './cream/base.css';
+@import './cream/forms.css';
+@import './cream/nav.css';
+@import './cream/hero.css';
+@import './cream/how.css';
+@import './cream/motion.css';

@@ -1,0 +1,170 @@
+@layer base {
+    :root {
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        /* Spring stand-ins: slight overshoot for the retro button slab and icon. */
+        --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+        color-scheme: dark;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        overflow-x: clip;
+        background: var(--color-void);
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-line) transparent;
+    }
+
+    body {
+        overflow-x: clip;
+        font-synthesis-weight: none;
+        text-rendering: optimizeLegibility;
+    }
+
+    :where(p, li, h1, h2, h3, h4, dd) {
+        overflow-wrap: break-word;
+    }
+
+    ::selection {
+        background: var(--color-signal-strong);
+        color: #000;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-signal);
+        outline-offset: 2px;
+    }
+
+    [id] {
+        scroll-margin-top: 6rem;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@utility tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Micro label: 11px uppercase, wide tracking. */
+@utility micro {
+    font-size: 11px;
+    letter-spacing: var(--tracking-widest);
+    color: var(--color-faint);
+    text-transform: uppercase;
+}
+
+@layer components {
+    .wrap {
+        margin-inline: auto;
+        width: 95%;
+        max-width: 1230px;
+    }
+
+    .section {
+        @apply py-20;
+    }
+
+    /* [ BRACKETED ] eyebrow. Brackets are CSS content with empty alt text, so screen readers skip them. */
+    .eyebrow {
+        @apply mb-4 text-xs tracking-[0.2em] text-signal uppercase;
+    }
+
+    .eyebrow::before {
+        content: '[ ' / '';
+    }
+
+    .eyebrow::after {
+        content: ' ]' / '';
+    }
+
+    .display {
+        @apply font-pixel tracking-tight text-fg;
+    }
+
+    .display-1 {
+        @apply text-5xl leading-[0.95] sm:text-6xl lg:text-7xl;
+    }
+
+    .display-2 {
+        @apply text-4xl md:text-5xl;
+    }
+
+    .display-3 {
+        @apply text-2xl md:text-3xl;
+    }
+
+    .lede {
+        @apply mt-4 max-w-2xl text-[15px] leading-relaxed text-dim;
+    }
+
+    .link {
+        @apply text-body underline decoration-line underline-offset-4 transition-colors hover:text-signal hover:decoration-signal;
+    }
+
+    .signal-link {
+        @apply inline-block text-sm text-signal uppercase underline-offset-4 hover:underline;
+    }
+
+    .panel {
+        @apply rounded-lg border border-line bg-panel p-5 md:p-6;
+    }
+
+    .panel--accent {
+        border-color: color-mix(in srgb, var(--color-signal) 40%, transparent);
+    }
+
+    .panel--link {
+        @apply transition-colors duration-300 hover:border-signal/60;
+    }
+
+    /* Legal / markdown prose. */
+    .prose-pixel {
+        @apply max-w-[72ch] text-[14px] leading-[1.8] text-dim;
+
+        & h2 {
+            @apply mt-14 mb-4 font-pixel text-3xl tracking-tight text-fg;
+        }
+
+        & h2:first-child {
+            @apply mt-0;
+        }
+
+        & p {
+            @apply mb-4;
+        }
+
+        & ul {
+            @apply mb-6 list-[square] space-y-2 pl-6 marker:text-signal;
+        }
+
+        & :is(b, strong) {
+            @apply font-medium text-body;
+        }
+
+        & a {
+            @apply text-body underline decoration-line underline-offset-[3px] transition-colors duration-300 hover:text-signal hover:decoration-signal;
+        }
+
+        & code {
+            @apply text-body;
+        }
+
+        & pre {
+            @apply mb-6 overflow-x-auto rounded-lg border border-line bg-panel p-4 text-[13px];
+        }
+
+        & table {
+            @apply mb-8 w-full border-collapse text-left text-[13px];
+        }
+
+        & th {
+            @apply micro border-b border-line py-2 pr-4 font-normal;
+        }
+
+        & td {
+            @apply border-b border-line-soft py-2 pr-4 align-top;
+        }
+    }
+}

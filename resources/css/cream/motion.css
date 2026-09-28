@@ -1,0 +1,274 @@
+@layer components {
+    .footer-rule {
+        height: 1px;
+        transform: scaleX(1);
+        transform-origin: left;
+        background: var(--color-line);
+        transition: transform 600ms var(--ease-in-out);
+    }
+
+    .footer-rule.reveal-armed:not([data-visible]) {
+        transform: scaleX(0);
+    }
+
+    .footer-rule[data-visible] {
+        transform: scaleX(1);
+    }
+
+    .motion-pop,
+    .motion-sheet {
+        transition-property: opacity, transform;
+        transition-timing-function: var(--ease-out);
+    }
+
+    .motion-pop {
+        transition-duration: 200ms;
+    }
+
+    .motion-sheet {
+        transition-duration: 400ms;
+    }
+
+    .motion-pop-from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+
+    .motion-pop-to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .motion-sheet-from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    .motion-sheet-to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .cookie-banner {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+            opacity 400ms var(--ease-out),
+            transform 400ms var(--ease-out);
+    }
+
+    @starting-style {
+        .cookie-banner {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+    }
+
+    [data-reveal] {
+        transition:
+            opacity 400ms var(--ease-out) var(--reveal-delay, 0ms),
+            transform 400ms var(--ease-out) var(--reveal-delay, 0ms),
+            clip-path 600ms var(--ease-in-out) var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal].reveal-armed:not([data-visible]) {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    [data-reveal][data-visible] {
+        opacity: 1;
+        transform: none;
+        animation: none;
+        clip-path: none;
+    }
+
+    [data-reveal='clip'].reveal-armed:not([data-visible]) {
+        opacity: 1;
+        transform: none;
+        clip-path: inset(0 0 100% 0);
+    }
+
+    [data-reveal='clip'][data-visible] {
+        clip-path: inset(0);
+    }
+
+    [data-reveal='line'].reveal-armed:not([data-visible]) {
+        opacity: 1;
+        transform: scaleX(0);
+    }
+
+    @keyframes reveal-up {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes reveal-clip {
+        from {
+            clip-path: inset(0 0 100% 0);
+        }
+
+        to {
+            clip-path: inset(0);
+        }
+    }
+
+    @keyframes reveal-line {
+        from {
+            transform: scaleX(0);
+        }
+
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        @supports (animation-timeline: view()) {
+            [data-reveal]:not(.reveal-armed):not([data-visible]) {
+                animation: reveal-up 400ms var(--ease-out) both;
+                animation-delay: var(--reveal-delay, 0ms);
+                animation-timeline: view();
+                animation-range: entry 0% entry 35%;
+            }
+
+            [data-reveal='clip']:not(.reveal-armed):not([data-visible]) {
+                animation-name: reveal-clip;
+                animation-duration: 600ms;
+                animation-timing-function: var(--ease-in-out);
+            }
+
+            [data-reveal='line']:not(.reveal-armed):not([data-visible]) {
+                animation-name: reveal-line;
+                animation-duration: 600ms;
+                animation-timing-function: var(--ease-in-out);
+            }
+        }
+    }
+
+    .video-text {
+        @apply relative inline-block align-baseline whitespace-nowrap;
+    }
+
+    .video-text__media {
+        display: none;
+    }
+
+    @supports ((-webkit-mask-image: url()) or (mask-image: url())) {
+        .video-text__media {
+            display: block;
+            position: absolute;
+            inset: 0;
+            background: var(--color-ink);
+            -webkit-mask-image: var(--vt-mask);
+            mask-image: var(--vt-mask);
+            -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+
+        .video-text__media video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-text__ghost {
+            color: transparent;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        .video-text__media {
+            display: none;
+        }
+
+        .video-text__ghost {
+            color: inherit;
+        }
+
+        .hero-enter,
+        [data-reveal],
+        .footer-rule,
+        .cookie-banner,
+        .list-row,
+        .hero-line__inner,
+        .hero-strike,
+        .hero-strike::after,
+        .hero-cta__arrow,
+        .faq-item__icon,
+        .proof__swash,
+        .motion-pop,
+        .motion-sheet {
+            animation: none !important;
+            transition-property: color, background-color, border-color, opacity;
+            transform: none !important;
+            clip-path: none !important;
+        }
+
+        .proof__swash {
+            transform: scaleX(1) rotate(-1.4deg) !important;
+        }
+
+        .header-menu__line {
+            transition: none !important;
+        }
+
+        .mobile-nav__panel {
+            clip-path: none !important;
+            transition: opacity 160ms var(--ease-out);
+            opacity: 0;
+        }
+
+        .mobile-nav[data-open] .mobile-nav__panel {
+            opacity: 1;
+        }
+
+        .mobile-nav__link,
+        .mobile-nav__footer {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+            transition-delay: 0ms !important;
+        }
+
+        .hero-enter,
+        [data-reveal],
+        .cookie-banner {
+            opacity: 1 !important;
+        }
+
+        .site-header__rule {
+            animation: none !important;
+            opacity: 0;
+            transform: none;
+        }
+
+        .btn:active {
+            transform: none;
+        }
+
+        @starting-style {
+            .hero-enter,
+            .cookie-banner {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    }
+}

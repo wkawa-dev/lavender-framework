@@ -1,0 +1,114 @@
+@layer components {
+    /*
+     * Section entrance: rise + blur-in, once. Same [data-reveal] contract as
+     * cream (lib/reveal.js): view() timeline where supported, otherwise
+     * IntersectionObserver arms below-fold nodes only.
+     */
+    [data-reveal] {
+        transition:
+            opacity 600ms var(--ease-out) var(--reveal-delay, 0ms),
+            transform 600ms var(--ease-out) var(--reveal-delay, 0ms),
+            filter 600ms var(--ease-out) var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal].reveal-armed:not([data-visible]) {
+        opacity: 0;
+        transform: translateY(16px);
+        filter: blur(8px);
+    }
+
+    [data-reveal][data-visible] {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        animation: none;
+    }
+
+    @keyframes px-reveal {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(8px);
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        @supports (animation-timeline: view()) {
+            [data-reveal]:not(.reveal-armed):not([data-visible]) {
+                animation: px-reveal 600ms var(--ease-out) both;
+                animation-delay: var(--reveal-delay, 0ms);
+                animation-timeline: view();
+                animation-range: entry 0% entry 40%;
+            }
+        }
+    }
+
+    /* Above-fold hero entrance: CSS only, starts at first paint. */
+    .px-enter {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition:
+            opacity 600ms var(--ease-out) var(--enter-delay, 0ms),
+            transform 600ms var(--ease-out) var(--enter-delay, 0ms),
+            filter 600ms var(--ease-out) var(--enter-delay, 0ms);
+    }
+
+    @starting-style {
+        .px-enter {
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(8px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        [data-reveal],
+        .px-enter,
+        .pixel-grid--pop > span,
+        .btn-retro,
+        .btn-retro__slab,
+        .btn-retro__icon svg,
+        .btn-retro__label,
+        .px-menu__link,
+        .px-toggle__lines span,
+        .px-faq__chevron {
+            animation: none !important;
+            transition-property: color, background-color, border-color, opacity !important;
+            filter: none !important;
+        }
+
+        [data-reveal],
+        .px-enter {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .px-menu__panel {
+            clip-path: none !important;
+            opacity: 0;
+            transition: opacity 160ms linear !important;
+        }
+
+        .px-menu[data-open] .px-menu__panel {
+            opacity: 1;
+        }
+
+        .px-menu__link {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        @starting-style {
+            .px-enter {
+                opacity: 1;
+                transform: none;
+                filter: none;
+            }
+        }
+    }
+}

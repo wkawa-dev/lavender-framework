@@ -1,0 +1,46 @@
+name: lighthouse
+
+# Manual: shared runners are noisy, so this re-proves the scores on demand while
+# tests/Feature/PerformanceContractTest.php gates every push deterministically.
+on:
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        theme: [cream, pixel]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build the production image
+        run: docker build -t lavender .
+
+      - name: Serve ${{ matrix.theme }}
+        run: |
+          docker run -d --name app -p 8080:8080 \
+            -e APP_KEY="base64:$(openssl rand -base64 32)" \
+            -e APP_URL=http://localhost:8080 \
+            -e THEME=${{ matrix.theme }} \
+            -e DB_CONNECTION=sqlite -e DB_DATABASE=/app/database/database.sqlite \
+            -e SESSION_DRIVER=file -e CACHE_STORE=file \
+            lavender
+          timeout 90 sh -c 'until curl -fsS http://localhost:8080/up > /dev/null; do sleep 2; done'
+
+      - name: Lighthouse 13 (mobile, 3 runs per page)
+        run: node scripts/lighthouse.mjs http://localhost:8080
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ matrix.theme }}
+          path: .lighthouse
+
+      - if: failure()
+        run: docker logs app
