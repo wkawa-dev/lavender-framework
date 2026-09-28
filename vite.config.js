@@ -12,6 +12,8 @@ export default defineConfig({
                 'resources/js/cream.js',
                 'resources/css/pixel.css',
                 'resources/js/pixel.js',
+                'resources/css/dusk.css',
+                'resources/js/dusk.js',
             ],
             refresh: true,
             // Fonts download at build time and ship from /build with hashed names.
@@ -45,6 +47,17 @@ export default defineConfig({
                     weights: [400],
                     preload: [{ weight: 400 }],
                     fallbacks: ['ui-monospace', 'monospace'],
+                }),
+                // dusk: body 400 preloaded; 500 on demand.
+                google('Instrument Sans', {
+                    weights: [400, 500],
+                    preload: [{ weight: 400 }],
+                }),
+                // dusk: display serif 400 preloaded; italic (accents, footer) on demand.
+                google('Instrument Serif', {
+                    weights: [400],
+                    styles: ['normal', 'italic'],
+                    preload: [{ weight: 400, style: 'normal' }],
                 }),
             ],
         }),

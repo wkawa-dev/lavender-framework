@@ -1,0 +1,145 @@
+@layer components {
+    /*
+     * Section entrance: a slow rise and fade, once. Same [data-reveal]
+     * contract as the other themes (lib/reveal.js): view() timeline where
+     * supported, otherwise IntersectionObserver arms below-fold nodes only.
+     */
+    [data-reveal] {
+        transition:
+            opacity 900ms var(--ease-out) var(--reveal-delay, 0ms),
+            transform 900ms var(--ease-out) var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal].reveal-armed:not([data-visible]) {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    [data-reveal][data-visible] {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    @keyframes dk-reveal {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        @supports (animation-timeline: view()) {
+            [data-reveal]:not(.reveal-armed):not([data-visible]) {
+                animation: dk-reveal 900ms var(--ease-out) both;
+                animation-delay: var(--reveal-delay, 0ms);
+                animation-timeline: view();
+                animation-range: entry 0% entry 45%;
+            }
+        }
+
+        /* The sky drifts on a long loop; transforms only. */
+        .dk-aurora span:nth-child(1) { animation: dk-drift-a 26s var(--ease-in-out) infinite alternate; }
+        .dk-aurora span:nth-child(2) { animation: dk-drift-b 32s var(--ease-in-out) infinite alternate; }
+        .dk-aurora span:nth-child(3) { animation: dk-drift-c 38s var(--ease-in-out) infinite alternate; }
+
+        /* Meters fill when their card reveals. */
+        [data-reveal] .meter > span {
+            transition: transform 1200ms var(--ease-out) 300ms;
+        }
+
+        [data-reveal].reveal-armed:not([data-visible]) .meter > span {
+            transform: scaleX(0);
+        }
+    }
+
+    @keyframes dk-drift-a {
+        to {
+            transform: translate(-12%, 8%) scale(1.1);
+        }
+    }
+
+    @keyframes dk-drift-b {
+        to {
+            transform: translate(-18%, -10%) scale(0.9);
+        }
+    }
+
+    @keyframes dk-drift-c {
+        to {
+            transform: translate(14%, 12%) scale(1.15);
+        }
+    }
+
+    /* Above-fold hero entrance: CSS only, starts at first paint. */
+    .dk-enter {
+        opacity: 1;
+        transform: none;
+        transition:
+            opacity 900ms var(--ease-out) var(--enter-delay, 0ms),
+            transform 900ms var(--ease-out) var(--enter-delay, 0ms);
+    }
+
+    @starting-style {
+        .dk-enter {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        [data-reveal],
+        .dk-enter,
+        .btn,
+        .btn--primary::before,
+        .btn__arrow,
+        .card--link,
+        .dk-brand__mark,
+        .dk-menu__link,
+        .dk-toggle__lines span,
+        .dk-faq__icon::before,
+        .dk-faq__icon::after,
+        .meter > span {
+            animation: none !important;
+            transition-property: color, background-color, border-color, opacity !important;
+        }
+
+        .dk-orbit__ring,
+        .dk-aurora span {
+            animation: none !important;
+        }
+
+        [data-reveal],
+        .dk-enter,
+        .card--link:hover {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .dk-menu__panel {
+            clip-path: none !important;
+            opacity: 0;
+            transition: opacity 200ms linear !important;
+        }
+
+        .dk-menu[data-open] .dk-menu__panel {
+            opacity: 1;
+        }
+
+        .dk-menu__link {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        @starting-style {
+            .dk-enter {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    }
+}

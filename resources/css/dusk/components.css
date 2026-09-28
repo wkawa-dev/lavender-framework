@@ -1,0 +1,501 @@
+@layer components {
+    /*
+     * Button: a pill. Primary is a lavender fill with a light sheen that
+     * sweeps across on hover or keyboard focus; the arrow drifts right.
+     * Ghost is a hairline pill that warms to lavender.
+     */
+    .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.625rem;
+        height: 3.25rem;
+        padding-inline: 1.75rem;
+        overflow: hidden;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        white-space: nowrap;
+        cursor: pointer;
+        transition:
+            transform 200ms var(--ease-out),
+            border-color 300ms var(--ease-out),
+            color 300ms var(--ease-out),
+            background-color 300ms var(--ease-out);
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    .btn--sm {
+        height: 2.75rem;
+        padding-inline: 1.25rem;
+        font-size: 0.875rem;
+    }
+
+    .btn--primary {
+        background: var(--color-glow);
+        color: var(--color-night);
+        box-shadow: 0 10px 40px -12px rgb(167 139 250 / 0.7);
+    }
+
+    .btn--primary::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+        transform: translateX(-110%);
+        transition: transform 700ms var(--ease-out);
+    }
+
+    .btn--ghost {
+        border-color: var(--color-line);
+        background: rgb(23 17 31 / 0.6);
+        color: var(--color-fg);
+    }
+
+    .btn__label {
+        position: relative;
+    }
+
+    .btn__arrow {
+        position: relative;
+        width: 1rem;
+        height: 1rem;
+        transition: transform 400ms var(--ease-out);
+    }
+
+    .btn:focus-visible.btn--primary::before {
+        transform: translateX(110%);
+    }
+
+    .btn:focus-visible .btn__arrow {
+        transform: translateX(3px);
+    }
+
+    .btn--ghost:focus-visible {
+        border-color: var(--color-glow);
+    }
+
+    @media (hover: hover) {
+        .btn--primary:hover::before {
+            transform: translateX(110%);
+        }
+
+        .btn:hover .btn__arrow {
+            transform: translateX(3px);
+        }
+
+        .btn--ghost:hover {
+            border-color: rgb(196 181 253 / 0.6);
+            color: var(--color-glow);
+        }
+    }
+
+    /* Stat strip: serif numbers over small labels, hairline dividers. */
+    .stats {
+        @apply grid grid-cols-2 gap-y-6 border-t border-line pt-6;
+    }
+
+    .stats > div {
+        padding-right: 1rem;
+    }
+
+    .stats > div:last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
+    @media (min-width: 768px) {
+        .stats {
+            grid-template-columns: none;
+            grid-auto-flow: column;
+        }
+
+        .stats > div + div {
+            @apply border-l border-line pl-6;
+        }
+
+        .stats > div:last-child:nth-child(odd) {
+            grid-column: auto;
+        }
+    }
+
+    .stats dt {
+        @apply micro;
+    }
+
+    .stats dd {
+        @apply tabular mt-1 font-serif text-4xl text-fg;
+    }
+
+    /* Star-bullet list. */
+    .stars {
+        @apply grid gap-3;
+    }
+
+    .stars li {
+        @apply flex gap-3 text-[15px] leading-relaxed text-body;
+    }
+
+    .stars li::before {
+        content: '✦' / '';
+        @apply shrink-0 text-xs leading-[1.75rem] text-glow;
+    }
+
+    /* Key/value grid. */
+    .kv {
+        @apply grid gap-x-8 gap-y-3 text-[15px] sm:grid-cols-[180px_1fr];
+    }
+
+    .kv > div {
+        display: contents;
+    }
+
+    .kv dt {
+        @apply micro pt-1;
+    }
+
+    .kv dd {
+        @apply text-body;
+    }
+
+    /* Meter: rounded track, gradient fill. --value is 0–1, --on the fill colour. */
+    .meter {
+        --on: var(--color-lilac);
+        display: block;
+        height: 0.5rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--color-line-soft);
+    }
+
+    .meter > span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, color-mix(in srgb, var(--on) 35%, transparent), var(--on));
+        transform: scaleX(var(--value, 0));
+        transform-origin: left;
+    }
+
+    /* Soft chips. */
+    .badge {
+        @apply inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-xs whitespace-nowrap text-dim;
+    }
+
+    .badge--solid {
+        @apply border-transparent bg-fg text-night;
+    }
+
+    .badge--inset {
+        @apply bg-raise text-body;
+    }
+
+    .badge--glow {
+        @apply border-transparent bg-glow text-night;
+    }
+
+    /* Tables: rounded frame, small labels, relaxed cells. */
+    .dk-table-wrap {
+        @apply relative w-full overflow-x-auto rounded-2xl border border-line bg-panel;
+    }
+
+    .dk-table {
+        @apply w-full caption-bottom text-[14px];
+    }
+
+    .dk-table thead tr {
+        @apply border-b border-line;
+    }
+
+    .dk-table tbody tr {
+        @apply border-b border-line-soft transition-colors duration-300 hover:bg-glow/[0.04];
+    }
+
+    .dk-table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .dk-table th {
+        @apply h-11 px-5 text-left align-middle text-xs font-medium whitespace-nowrap text-faint;
+    }
+
+    .dk-table td {
+        @apply px-5 py-3.5 align-middle text-dim;
+    }
+
+    .dk-table caption {
+        @apply border-t border-line px-5 py-3 text-left text-[13px] text-faint;
+    }
+
+    /* Callout: lavender hairline, faint wash, star icon. */
+    .notice {
+        @apply flex items-start gap-3 rounded-xl border border-glow/30 bg-glow/[0.05] px-4 py-3.5 text-sm leading-relaxed text-dim;
+    }
+
+    .notice strong {
+        @apply font-medium text-fg;
+    }
+
+    /* Breadcrumbs. */
+    .crumbs {
+        @apply flex flex-wrap items-center gap-2 text-sm text-faint;
+    }
+
+    .crumbs li + li::before {
+        content: '/' / '';
+        @apply mr-2 text-line;
+    }
+
+    .crumbs a {
+        @apply transition-colors hover:text-glow;
+    }
+
+    .crumbs [aria-current='page'] {
+        @apply text-body;
+    }
+
+    /* "On this page" chips. */
+    .chip-nav {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .chip-nav a {
+        @apply flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-dim transition-colors duration-300 hover:border-glow/50 hover:text-fg;
+    }
+
+    .chip-nav__num {
+        @apply font-serif text-faint italic transition-colors;
+    }
+
+    .chip-nav a:hover .chip-nav__num {
+        color: var(--color-glow);
+    }
+
+    /* FAQ on native <details>; height animates where ::details-content is supported. */
+    .dk-faq {
+        @apply grid gap-3;
+    }
+
+    .dk-faq details {
+        @apply rounded-2xl border border-line bg-panel/60 transition-colors duration-300;
+    }
+
+    .dk-faq details[open] {
+        border-color: rgb(196 181 253 / 0.3);
+    }
+
+    .dk-faq summary {
+        @apply flex cursor-pointer list-none items-center justify-between gap-6 px-6 py-5 text-left;
+    }
+
+    .dk-faq summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .dk-faq__q {
+        @apply text-[17px] font-medium text-body transition-colors duration-300;
+    }
+
+    .dk-faq summary:hover .dk-faq__q,
+    .dk-faq details[open] .dk-faq__q {
+        color: var(--color-fg);
+    }
+
+    /* Plus that turns into a minus: the vertical stroke folds away. */
+    .dk-faq__icon {
+        @apply relative size-8 shrink-0 rounded-full border border-line text-glow;
+    }
+
+    .dk-faq__icon::before,
+    .dk-faq__icon::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 1.5px;
+        margin: -0.75px 0 0 -6px;
+        border-radius: 1px;
+        background: currentColor;
+        transition: transform 400ms var(--ease-out);
+    }
+
+    .dk-faq__icon::after {
+        transform: rotate(90deg);
+    }
+
+    .dk-faq details[open] .dk-faq__icon::after {
+        transform: rotate(0deg);
+    }
+
+    .dk-faq__a {
+        @apply px-6 pb-6 text-[15px] leading-[1.7] text-dim;
+    }
+
+    @supports selector(::details-content) {
+        .dk-faq details {
+            interpolate-size: allow-keywords;
+        }
+
+        .dk-faq details::details-content {
+            height: 0;
+            opacity: 0;
+            overflow: clip;
+            transition:
+                height 400ms var(--ease-out),
+                opacity 400ms var(--ease-out),
+                content-visibility 400ms allow-discrete;
+        }
+
+        .dk-faq details[open]::details-content {
+            height: auto;
+            opacity: 1;
+        }
+    }
+
+    /*
+     * Hero sky: three soft light sources that drift. Pure gradients on a
+     * transform-animated layer, so it composites without repainting and is
+     * never the LCP element.
+     */
+    .dk-aurora {
+        position: absolute;
+        inset: -20% -10% auto;
+        z-index: -1;
+        height: 140%;
+        pointer-events: none;
+        mask-image: linear-gradient(to bottom, #000 40%, transparent);
+    }
+
+    .dk-aurora span {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.5;
+    }
+
+    .dk-aurora span:nth-child(1) {
+        top: 5%;
+        left: 50%;
+        width: 44rem;
+        height: 30rem;
+        background: radial-gradient(closest-side, rgb(167 139 250 / 0.45), transparent);
+    }
+
+    .dk-aurora span:nth-child(2) {
+        top: 25%;
+        left: 68%;
+        width: 34rem;
+        height: 26rem;
+        background: radial-gradient(closest-side, rgb(249 168 212 / 0.28), transparent);
+    }
+
+    .dk-aurora span:nth-child(3) {
+        top: 0;
+        left: 5%;
+        width: 36rem;
+        height: 24rem;
+        background: radial-gradient(closest-side, rgb(99 102 241 / 0.22), transparent);
+    }
+
+    /*
+     * Orbit (hero art): concentric rings, a crescent at the centre, and one
+     * body per series on its own ring. Decorative; the legend carries the words.
+     */
+    .dk-orbit {
+        position: relative;
+        width: 100%;
+        max-width: 420px;
+        aspect-ratio: 1;
+    }
+
+    .dk-orbit__ring {
+        position: absolute;
+        inset: var(--inset);
+        border: 1px solid var(--color-line);
+        border-radius: 50%;
+        animation: dk-spin var(--period, 60s) linear infinite;
+    }
+
+    .dk-orbit__ring:nth-child(even) {
+        animation-direction: reverse;
+    }
+
+    .dk-orbit__body {
+        position: absolute;
+        top: -7px;
+        left: calc(50% - 7px);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--body);
+        box-shadow: 0 0 24px 4px color-mix(in srgb, var(--body) 55%, transparent);
+    }
+
+    .dk-orbit__moon {
+        position: absolute;
+        inset: 36%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff, var(--color-glow) 45%, var(--color-glow-strong));
+        box-shadow: 0 0 90px 10px rgb(167 139 250 / 0.35);
+    }
+
+    /* The night side of the crescent: a disc in the page colour, offset. */
+    .dk-orbit__moon::after {
+        content: '';
+        position: absolute;
+        inset: -4% -4% 4% 22%;
+        border-radius: 50%;
+        background: var(--color-night);
+    }
+
+    @keyframes dk-spin {
+        to {
+            transform: rotate(1turn);
+        }
+    }
+
+    /* Smooth area chart. */
+    .dk-chart text {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        fill: var(--color-faint);
+    }
+
+    /* Oversized italic footer wordmark. CSS content keeps it out of the a11y tree and contrast audits. */
+    .dk-footer-mark::after {
+        content: attr(data-mark) / '';
+        display: block;
+        margin-top: 3rem;
+        text-align: center;
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-size: 22vw;
+        line-height: 0.85;
+        letter-spacing: -0.02em;
+        background: linear-gradient(180deg, var(--color-line), transparent 85%);
+        background-clip: text;
+        color: transparent;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .dk-footer-mark::after {
+            font-size: 17vw;
+        }
+    }
+
+    /* Form fields. */
+    .dk-label {
+        @apply mb-2 block text-sm font-medium text-body;
+    }
+
+    .dk-field {
+        @apply w-full rounded-xl border border-line bg-night/60 px-4 py-3 text-[15px] text-fg outline-none transition-colors duration-300 placeholder:text-faint focus:border-glow;
+    }
+}

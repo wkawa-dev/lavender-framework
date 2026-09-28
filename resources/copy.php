@@ -30,7 +30,7 @@ return [
 
     'footer' => [
         'headline' => 'Fast by default. Keep it that way.',
-        'tagline' => 'Server-rendered Laravel with two themes, a 100 Lighthouse floor, and agent discovery built in.',
+        'tagline' => 'Server-rendered Laravel with three themes, a 100 Lighthouse floor, and agent discovery built in.',
         'copyright' => '© :year :brand',
         'nav' => 'Footer',
         'columns' => [
@@ -42,7 +42,7 @@ return [
     'home' => [
         'seo' => [
             'title' => 'Laravel starter that ships at 100 Lighthouse',
-            'description' => 'Server-rendered Laravel starter with two themes, self-hosted fonts, responsive WebP, and motion that never blocks first paint.',
+            'description' => 'Server-rendered Laravel starter with three themes, self-hosted fonts, responsive WebP, and motion that never blocks first paint.',
         ],
         'hero' => [
             'eyebrow' => 'Laravel starter',
@@ -58,7 +58,7 @@ return [
             'items' => [
                 ['display' => '100', 'label' => 'Lighthouse in all four categories'],
                 ['display' => '0', 'label' => 'Render-blocking font requests'],
-                ['display' => '2', 'label' => 'Themes, one set of copy'],
+                ['display' => '3', 'label' => 'Themes, one set of copy'],
             ],
         ],
         'art' => [
@@ -100,7 +100,7 @@ return [
         ],
         'join' => [
             'headline' => 'Pick a theme, keep the performance budget.',
-            'body' => 'Set THEME=cream or THEME=pixel. Both themes render the same routes and copy, and both pass the same tests.',
+            'body' => 'Set THEME=cream, THEME=pixel, or THEME=dusk. Every theme renders the same routes and copy, and all of them pass the same tests.',
             'primary' => 'Start a project',
             'secondary' => 'Browse components',
         ],
@@ -138,7 +138,7 @@ return [
         'cta' => [
             'headline' => 'Ready when you are.',
             'muted' => 'Clone it and ship.',
-            'body' => 'Run composer setup, pick a theme, and replace the copy. The tests keep both themes honest.',
+            'body' => 'Run composer setup, pick a theme, and replace the copy. The tests keep every theme honest.',
             'primary' => 'Contact',
             'secondary' => 'Components',
         ],

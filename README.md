@@ -10,10 +10,11 @@ Most starters give you a clean scaffold and leave performance to later. This one
 | --- | --- |
 | ![cream theme](docs/screenshots/cream.webp) | ![pixel theme](docs/screenshots/pixel.webp) |
 
-Two complete themes render the same routes and copy. You switch between them with one env var:
+Three complete themes render the same routes and copy. You switch between them with one env var:
 
 - **cream**: light and editorial. Paper, ink hairlines, Geist + Newsreader, scroll-stacked cards, a proof strip that counts up, and a native `<dialog>` mobile nav.
 - **pixel**: pitch black. Geist Mono + Geist Pixel, one orange signal colour, retro pixel buttons, stepped motion, and pixel-art meters and charts. No runtime motion library: its whole JS entry is 0.3 KB on top of Alpine.
+- **dusk**: deep plum night. Instrument Serif + Instrument Sans, one lavender glow, pill buttons with a light sheen, a drifting CSS sky, and a slow orbit for hero art. Also no runtime motion library.
 
 ## Opinions
 
@@ -158,7 +159,7 @@ The repository is set up so an agent can make changes without breaking the score
 | Fonts | Self-hosted at build time, preloads per theme, metric-matched fallbacks |
 | Images | `images:optimize` → responsive WebP + manifest; `<x-image>`; `ASSET_CDN_URL` for a CDN |
 | Motion | CSS first; GSAP only on demand; every effect has a reduced-motion branch |
-| Theming | `THEME` env, `theme::` view namespace, `<x-cream::…>` / `<x-pixel::…>` components, local `?theme=` preview |
+| Theming | `THEME` env, `theme::` view namespace, `<x-cream::…>` / `<x-pixel::…>` / `<x-dusk::…>` components, local `?theme=` preview |
 | Production | Multi-stage `Dockerfile` on FrankenPHP; zstd/gzip, immutable caching, `/up` healthcheck, migrations on boot |
 | Tests | Pages in both themes, performance contract, agent readiness (MCP, OAuth, discovery), contact form, image pipeline |
 
@@ -173,9 +174,9 @@ config/agents.php                  crawler policy, token lifetime, scopes
 resources/agent-skills/            SKILL.md files published to agents
 resources/copy.php                 every user-facing string
 resources/views/partials/head.blade.php   the load-bearing <head>
-resources/views/themes/{cream,pixel}/     layouts, components, pages, errors
-resources/css/{cream,pixel}.css    one Tailwind entry per theme
-resources/js/{cream,pixel}.js      one JS entry per theme; shared modules in lib/
+resources/views/themes/{cream,pixel,dusk}/  layouts, components, pages, errors
+resources/css/{cream,pixel,dusk}.css  one Tailwind entry per theme
+resources/js/{cream,pixel,dusk}.js    one JS entry per theme; shared modules in lib/
 docker/                            Caddyfile, php.ini, entrypoint
 ```
 

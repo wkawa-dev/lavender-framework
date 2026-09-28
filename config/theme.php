@@ -9,6 +9,7 @@ return [
     |
     | cream: light editorial paper, Geist + Newsreader, ink hairlines.
     | pixel: pitch black, Geist Mono + Geist Pixel, orange signal, stepped motion.
+    | dusk:  deep plum night, Instrument Serif + Instrument Sans, lavender glow.
     |
     | Local and testing environments also accept ?theme=pixel to preview the
     | other theme without touching .env (see ResolveTheme middleware).
@@ -40,6 +41,12 @@ return [
             'vite' => ['resources/css/pixel.css', 'resources/js/pixel.js'],
             'fonts' => ['geist-mono', 'geist-pixel'],
             'color' => '#000000',
+            'scheme' => 'dark',
+        ],
+        'dusk' => [
+            'vite' => ['resources/css/dusk.css', 'resources/js/dusk.js'],
+            'fonts' => ['instrument-sans', 'instrument-serif'],
+            'color' => '#0f0b16',
             'scheme' => 'dark',
         ],
     ],

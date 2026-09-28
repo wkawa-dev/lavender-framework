@@ -1,0 +1,187 @@
+@layer components {
+    /*
+     * Header: transparent over the sky at the top, frosted once the page
+     * scrolls (scroll-driven animation, no scroll listener). Without support
+     * it is simply always frosted.
+     */
+    .dk-header {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        width: 100%;
+        border-bottom: 1px solid rgb(47 37 64 / 0.7);
+        background: rgb(15 11 22 / 0.78);
+        backdrop-filter: blur(14px) saturate(140%);
+    }
+
+    @supports (animation-timeline: scroll()) {
+        .dk-header {
+            animation: dk-header-frost linear both;
+            animation-timeline: scroll();
+            animation-range: 0 24px;
+        }
+    }
+
+    @keyframes dk-header-frost {
+        from {
+            border-bottom-color: transparent;
+            background: rgb(15 11 22 / 0);
+        }
+
+        to {
+            border-bottom-color: rgb(47 37 64 / 0.7);
+            background: rgb(15 11 22 / 0.78);
+        }
+    }
+
+    .dk-header__bar {
+        @apply mx-auto flex h-16 w-[92%] max-w-[1180px] items-center justify-between gap-6;
+    }
+
+    /* Brand: crescent mark + serif name. */
+    .dk-brand {
+        @apply flex items-center gap-2.5 text-fg;
+    }
+
+    .dk-brand__mark {
+        @apply size-6 text-glow;
+        transition: transform 700ms var(--ease-out);
+    }
+
+    .dk-brand__name {
+        @apply font-serif text-2xl leading-none;
+    }
+
+    .dk-brand:hover .dk-brand__mark {
+        transform: rotate(-24deg);
+    }
+
+    /* Desktop links sit in one soft pill; the current page is a raised chip. */
+    .dk-nav {
+        @apply flex items-center gap-1 rounded-full border border-line p-1;
+        background: rgb(23 17 31 / 0.6);
+    }
+
+    .dk-nav-link {
+        @apply rounded-full px-4 py-1.5 text-sm text-dim transition-colors duration-300 hover:text-fg;
+    }
+
+    .dk-nav-link[aria-current='page'] {
+        @apply bg-raise text-fg;
+    }
+
+    /* Menu toggle: two lines that cross into an X. */
+    .dk-toggle {
+        @apply relative flex h-10 items-center gap-2.5 rounded-full border border-line px-4 text-sm text-body;
+        min-width: 44px;
+        background: rgb(23 17 31 / 0.6);
+    }
+
+    .dk-toggle__lines {
+        display: grid;
+        gap: 4px;
+        width: 0.875rem;
+    }
+
+    .dk-toggle__lines span {
+        height: 1.5px;
+        border-radius: 1px;
+        background: currentColor;
+        transition: transform 400ms var(--ease-out);
+    }
+
+    .dk-toggle.is-open .dk-toggle__lines span:nth-child(1) { transform: translateY(2.75px) rotate(45deg); }
+    .dk-toggle.is-open .dk-toggle__lines span:nth-child(2) { transform: translateY(-2.75px) rotate(-45deg); }
+
+    .dk-toggle.is-covered {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /*
+     * Mobile menu on <dialog>: the panel opens as a circle growing out of the
+     * toggle and closes back into it. Brand + close sit in the same 4rem bar
+     * as the header so the toggle appears not to move.
+     */
+    .dk-menu {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border: none;
+        background: transparent;
+        color: var(--color-fg);
+    }
+
+    .dk-menu::backdrop {
+        background: transparent;
+    }
+
+    .dk-menu__panel {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        background:
+            radial-gradient(ellipse 90% 50% at 100% 0%, rgb(167 139 250 / 0.22), transparent 70%),
+            radial-gradient(ellipse 70% 40% at 0% 100%, rgb(249 168 212 / 0.1), transparent 70%),
+            var(--color-night);
+        clip-path: circle(0 at calc(100% - 3rem) 2rem);
+        transition: clip-path 550ms var(--ease-out);
+    }
+
+    .dk-menu[data-open] .dk-menu__panel {
+        clip-path: circle(150% at calc(100% - 3rem) 2rem);
+    }
+
+    .dk-menu:not([data-open]) .dk-menu__panel {
+        transition: clip-path 350ms var(--ease-in-out);
+    }
+
+    .dk-menu__bar {
+        position: absolute;
+        inset-inline: 0;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 2;
+    }
+
+    .dk-menu__nav {
+        padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+    }
+
+    .dk-menu__item + .dk-menu__item {
+        border-top: 1px solid var(--color-line-soft);
+    }
+
+    .dk-menu__link {
+        @apply flex items-center justify-between py-5 font-serif text-4xl text-dim transition-colors hover:text-fg;
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+            opacity 300ms var(--ease-out),
+            transform 300ms var(--ease-out),
+            color 200ms;
+    }
+
+    .dk-menu__link::after {
+        content: '→' / '';
+        font-family: var(--font-sans);
+        font-size: 1.25rem;
+        color: var(--color-faint);
+    }
+
+    .dk-menu__link[aria-current='page'] {
+        @apply text-glow italic;
+    }
+
+    .dk-menu[data-open] .dk-menu__link {
+        opacity: 1;
+        transform: none;
+        transition-delay: min(calc(160ms + var(--i, 0) * 50ms), 450ms);
+    }
+}

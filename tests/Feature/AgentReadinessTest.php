@@ -174,11 +174,11 @@ class AgentReadinessTest extends TestCase
         }
     }
 
-    public function test_head_links_the_ai_catalog_and_webmcp_ships_in_both_themes(): void
+    public function test_head_links_the_ai_catalog_and_webmcp_ships_in_every_theme(): void
     {
         $this->get('/')->assertSee('<link rel="ai-catalog" href="/.well-known/ai-catalog.json">', false);
 
-        foreach (['cream', 'pixel'] as $theme) {
+        foreach (['cream', 'pixel', 'dusk'] as $theme) {
             $this->assertStringContainsString('registerWebMcpTools()', file_get_contents(resource_path("js/{$theme}.js")));
         }
     }

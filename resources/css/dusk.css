@@ -1,0 +1,44 @@
+/*
+ * dusk: deep plum night, Instrument Serif display, Instrument Sans body,
+ * one lavender glow. Motion is slow and eased, like light at the end of a day.
+ *
+ * Every effect below is a transition, keyframe, or scroll-driven animation.
+ * No runtime motion library.
+ *
+ * source(none) keeps the other themes' classes out of this bundle.
+ */
+@import 'tailwindcss' source(none);
+
+@source '../views/themes/dusk/**/*.blade.php';
+@source '../views/components/**/*.blade.php';
+@source '../views/errors/**/*.blade.php';
+
+/* '<Family> fallback' faces come from @fonts (fontaine): local fonts with
+   size-adjust + ascent/descent overrides, so the swap to the webfont does not shift layout. */
+@theme {
+    --font-sans: 'Instrument Sans', 'Instrument Sans fallback', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', 'Instrument Serif fallback', ui-serif, Georgia, serif;
+
+    --color-night: #0f0b16;
+    --color-panel: #17111f;
+    --color-raise: #221a2e;
+    --color-line: #2f2540;
+    --color-line-soft: #1f1829;
+    --color-fg: #f3effa;
+    --color-body: #d6cfe3;
+    --color-dim: #aca3bd;
+    /* 4.9:1 on raise, 5.4:1 on panel, 5.7:1 on night. */
+    --color-faint: #8f86a3;
+    --color-glow: #c4b5fd;
+    --color-glow-strong: #a78bfa;
+
+    /* Three-step series: moon → lilac → rose (charts, meters, orbit). */
+    --color-moon: #f3effa;
+    --color-lilac: #a78bfa;
+    --color-rose: #f9a8d4;
+}
+
+@import './dusk/base.css';
+@import './dusk/nav.css';
+@import './dusk/components.css';
+@import './dusk/motion.css';

@@ -1,0 +1,199 @@
+@layer base {
+    :root {
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        color-scheme: dark;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        overflow-x: clip;
+        background: var(--color-night);
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-line) transparent;
+    }
+
+    /* A faint plum sky at the top of every page. Gradients are paint, not requests. */
+    body {
+        overflow-x: clip;
+        background:
+            radial-gradient(ellipse 80% 40rem at 50% -10rem, rgb(167 139 250 / 0.12), transparent 70%),
+            var(--color-night);
+        font-synthesis-weight: none;
+        text-rendering: optimizeLegibility;
+    }
+
+    :where(p, li, h1, h2, h3, h4, dd) {
+        overflow-wrap: break-word;
+    }
+
+    ::selection {
+        background: var(--color-glow);
+        color: var(--color-night);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-glow);
+        outline-offset: 3px;
+        border-radius: 0.375rem;
+    }
+
+    [id] {
+        scroll-margin-top: 6rem;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@utility tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Small label: 12px, medium, lightly tracked. Dusk never shouts in caps. */
+@utility micro {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-faint);
+}
+
+@layer components {
+    .wrap {
+        margin-inline: auto;
+        width: 92%;
+        max-width: 1180px;
+    }
+
+    .section {
+        @apply py-24;
+    }
+
+    /* Eyebrow with a four-point star. The star is CSS content with empty alt text. */
+    .eyebrow {
+        @apply mb-5 flex items-center gap-2 text-sm font-medium text-glow;
+    }
+
+    .eyebrow::before {
+        content: '✦' / '';
+        font-size: 0.75em;
+    }
+
+    .display {
+        @apply font-serif font-normal tracking-tight text-fg;
+        text-wrap: balance;
+    }
+
+    .display-1 {
+        @apply text-5xl leading-[1.02] sm:text-6xl lg:text-[5.25rem];
+    }
+
+    .display-2 {
+        @apply text-4xl leading-[1.05] md:text-5xl;
+    }
+
+    .display-3 {
+        @apply text-2xl leading-tight md:text-3xl;
+    }
+
+    /* Italic lavender → rose accent for a phrase inside display type. */
+    .glow-text {
+        font-style: italic;
+        background: linear-gradient(100deg, var(--color-glow), var(--color-rose));
+        background-clip: text;
+        color: transparent;
+    }
+
+    .lede {
+        @apply mt-5 max-w-2xl text-[17px] leading-relaxed text-dim;
+        text-wrap: pretty;
+    }
+
+    .link {
+        @apply text-body underline decoration-line decoration-1 underline-offset-4 transition-colors duration-300 hover:text-glow hover:decoration-glow;
+    }
+
+    .glow-link {
+        @apply inline-flex items-center gap-1.5 text-sm font-medium text-glow underline-offset-4 hover:underline;
+    }
+
+    /* Card: soft plum surface, hairline, generous radius. */
+    .card {
+        @apply rounded-2xl border border-line p-6 md:p-7;
+        background: linear-gradient(180deg, var(--color-panel), rgb(23 17 31 / 0.55));
+    }
+
+    .card--glow {
+        border-color: rgb(196 181 253 / 0.35);
+        box-shadow: 0 0 0 1px rgb(196 181 253 / 0.06), 0 30px 80px -40px rgb(167 139 250 / 0.45);
+    }
+
+    .card--link {
+        transition:
+            border-color 400ms var(--ease-out),
+            transform 400ms var(--ease-out);
+    }
+
+    .card--link:hover {
+        border-color: rgb(196 181 253 / 0.4);
+        transform: translateY(-3px);
+    }
+
+    /* Legal / markdown prose. */
+    .prose-dusk {
+        @apply max-w-[70ch] text-[16px] leading-[1.75] text-dim;
+
+        & h2 {
+            @apply mt-14 mb-4 font-serif text-3xl tracking-tight text-fg md:text-4xl;
+        }
+
+        & h2:first-child {
+            @apply mt-0;
+        }
+
+        & h3 {
+            @apply mt-10 mb-3 text-lg font-medium text-fg;
+        }
+
+        & p {
+            @apply mb-5;
+        }
+
+        & ul {
+            @apply mb-6 list-disc space-y-2 pl-6 marker:text-glow;
+        }
+
+        & :is(b, strong) {
+            @apply font-medium text-body;
+        }
+
+        & a {
+            @apply text-body underline decoration-line underline-offset-[3px] transition-colors duration-300 hover:text-glow hover:decoration-glow;
+        }
+
+        & code {
+            @apply rounded bg-raise px-1.5 py-0.5 text-[0.875em] text-body;
+        }
+
+        & pre {
+            @apply mb-6 overflow-x-auto rounded-xl border border-line bg-panel p-4 text-[13px];
+        }
+
+        & pre code {
+            @apply bg-transparent p-0;
+        }
+
+        & table {
+            @apply mb-8 w-full border-collapse text-left text-[14px];
+        }
+
+        & th {
+            @apply micro border-b border-line py-2 pr-4;
+        }
+
+        & td {
+            @apply border-b border-line-soft py-2 pr-4 align-top;
+        }
+    }
+}

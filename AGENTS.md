@@ -1,13 +1,14 @@
 # Lavender: agent instructions
 
-Lavender is an opinionated Laravel 13 starter: server-rendered Blade, Tailwind v4, Alpine, Vite. It is built to score 100 on Lighthouse and to be agent-ready by default (see [Agent readiness](#agent-readiness)). It ships two themes on the same routes and copy:
+Lavender is an opinionated Laravel 13 starter: server-rendered Blade, Tailwind v4, Alpine, Vite. It is built to score 100 on Lighthouse and to be agent-ready by default (see [Agent readiness](#agent-readiness)). It ships three themes on the same routes and copy:
 
 | Theme | Look |
 | --- | --- |
 | `cream` | Light editorial. Paper, ink, hairlines. Geist + Newsreader. |
 | `pixel` | Pitch black, mono body, Geist Pixel display, one orange signal, stepped motion. |
+| `dusk` | Deep plum night. Instrument Serif + Instrument Sans, one lavender glow, slow eased motion. |
 
-The performance budget is the product. Served with compression (see [Measuring](#measuring)), both themes score 100 on every indexable page in all five Lighthouse 13 categories (performance, accessibility, best practices, SEO, agentic browsing), mobile and desktop. Cream's home page can read 97–99 on an unlucky mobile run. Every rule below exists because breaking it cost points. Do not trade one away for convenience without measuring.
+The performance budget is the product. Served with compression (see [Measuring](#measuring)), every theme scores 100 on every indexable page in all five Lighthouse 13 categories (performance, accessibility, best practices, SEO, agentic browsing), mobile and desktop. Cream's home page can read 97–99 on an unlucky mobile run. Every rule below exists because breaking it cost points. Do not trade one away for convenience without measuring.
 
 ## Commands
 
@@ -36,31 +37,31 @@ vendor/bin/pint --dirty
 | `app/Mcp/` | The MCP server and its tools (`laravel/mcp`) |
 | `resources/agent-skills/{name}/SKILL.md` | Agent skills, published with digests at `/.well-known/agent-skills/index.json` |
 | `resources/js/lib/webmcp.js` | The same tools for in-browser agents via `navigator.modelContext` |
-| `resources/views/themes/{cream,pixel}/` | `layouts/`, `components/` (`<x-cream::…>`, `<x-pixel::…>`), `pages/`, `errors/` |
+| `resources/views/themes/{cream,pixel,dusk}/` | `layouts/`, `components/` (`<x-cream::…>`, `<x-pixel::…>`, `<x-dusk::…>`), `pages/`, `errors/` |
 | `resources/views/components/image.blade.php` | `<x-image>`, shared by both themes |
-| `resources/css/{cream,pixel}.css` + folder | One Tailwind entry per theme |
-| `resources/js/{cream,pixel}.js`, `resources/js/lib/` | One JS entry per theme; shared modules in `lib/` |
+| `resources/css/{cream,pixel,dusk}.css` + folder | One Tailwind entry per theme |
+| `resources/js/{cream,pixel,dusk}.js`, `resources/js/lib/` | One JS entry per theme; shared modules in `lib/` |
 | `resources/images/` | Image sources (commit them). `public/images/` is generated (commit it too) |
 | `docs/themes/*.md` | Visual rules per theme. Read the active one before touching UI |
 | `docker/`, `Dockerfile` | FrankenPHP production image with compression and immutable caching |
 
 Rules:
 
-- Pages render `theme::pages.*`. A new page needs a view in **both** themes and a row in `PagesTest::pages()`. If it is public, add it to `Agents::pages()` too: that one list feeds the sitemap, llms.txt, and the MCP `list_pages` / `read_page` tools.
+- Pages render `theme::pages.*`. A new page needs a view in **every** theme and a row in `PagesTest::pages()`. If it is public, add it to `Agents::pages()` too: that one list feeds the sitemap, llms.txt, and the MCP `list_pages` / `read_page` tools.
 - Copy lives in `resources/copy.php`, never in Blade. Both themes read the same keys.
 - A theme's components never reach into the other theme. Shared, class-free markup (like `<x-image>`) goes in `resources/views/components/`.
 - `/kit` is the component gallery for the active theme. Add every new component there. It is `noindex` and out of the sitemap.
 
 ## Loading playbook
 
-This is how both themes reach 100. Follow it for every page.
+This is how every theme reaches 100. Follow it for every page.
 
 ### Fonts
 
 1. **Self-host at build time.** Fonts are declared in `vite.config.js` (`fonts: [...]`) through `laravel-vite-plugin/fonts`. Vite downloads them, fingerprints them into `public/build/assets`, and writes `public/build/fonts-manifest.json`. At runtime there is no request to Google, Bunny, or any other origin, so nothing to preconnect to and nothing third-party on the critical path.
 2. **Never `@import url(https://fonts.googleapis.com/...)` in CSS.** That is what the original pixel site did: HTML → CSS → Google CSS → font file is a three-hop render-blocking chain on a second origin. It was the largest single loss in its Lighthouse score.
 3. **Use `google()`, not `bunny()`.** Bunny's CSS lists woff2 and woff in one `src`. The plugin splits each into its own `@font-face` with the same `unicode-range`, and the later (woff) rule wins. Browsers then download the preloaded woff2 **and** a bigger woff. Google is queried with a woff2 user agent and returns woff2 only, and often a single variable file (Geist 400–600 is one 29 KB file instead of three).
-4. **Preload only above-the-fold faces.** `preload: [{ weight: 400 }]` per family. Everything else is declared and loads on first use. Cream preloads Geist (variable) and Newsreader 400 normal; the italic loads later for the footer. Pixel preloads Geist Mono and Geist Pixel.
+4. **Preload only above-the-fold faces.** `preload: [{ weight: 400 }]` per family. Everything else is declared and loads on first use. Cream preloads Geist (variable) and Newsreader 400 normal; the italic loads later for the footer. Pixel preloads Geist Mono and Geist Pixel. Dusk preloads Instrument Sans 400 and Instrument Serif 400 normal.
 5. **Load only the active theme's faces.** The head calls `@fonts(\App\Support\Theme::fonts())` with the aliases from `config/theme.php`. `@fonts` emits `<link rel="preload">` for those aliases plus an inline `<style>` with their `@font-face` rules. The inline style means the font URLs are known before the main CSS arrives. Adding a family: add it in `vite.config.js`, then add its alias (slug of the family name, e.g. `geist-mono`) to the theme in `config/theme.php`.
 6. **Keep `fontaine` installed.** It is an optional peer of the plugin; without it no fallback faces are generated and nothing warns loudly. With it, `@fonts` emits `"<Family> fallback"` faces (a local font with `size-adjust` and ascent/descent overrides) so the `font-display: swap` swap does not shift layout.
 7. **Reference the fallback in the theme stack.** `@theme { --font-sans: 'Geist', 'Geist fallback', ui-sans-serif, ... }`. A stack without the fallback name gets no benefit from item 6.

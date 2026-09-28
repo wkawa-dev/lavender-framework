@@ -24,7 +24,7 @@ class PagesTest extends TestCase
     {
         $cases = [];
 
-        foreach (['cream', 'pixel'] as $theme) {
+        foreach (['cream', 'pixel', 'dusk'] as $theme) {
             foreach (['/', '/kit', '/contact', '/privacy', '/docs/api'] as $path) {
                 $cases["{$theme} {$path}"] = [$theme, $path];
             }
@@ -105,6 +105,6 @@ class PagesTest extends TestCase
      */
     public static function themes(): array
     {
-        return ['cream' => ['cream'], 'pixel' => ['pixel']];
+        return ['cream' => ['cream'], 'pixel' => ['pixel'], 'dusk' => ['dusk']];
     }
 }
